@@ -1,0 +1,91 @@
+﻿@model DropDownVM
+@{
+    ViewData["Title"] = "Inicio";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Dropdowns Anidados con .NET 8</h1>
+    <p>Desarrolado por: <a href="https://render2web.com/promociones">render2web</a>.</p>
+</div>
+
+<div class="row">
+    @*SUCURSALES*@
+    <div class="col-4">
+        <label for="sucursalDropdown">Sucursal: </label>
+        <select name="sucursalDropdown" id="sucursalDropdown" class="form-control">
+            <option value="">Seleccione una sucursal</option>
+            @foreach (var sucursal in Model.Sucursales)
+            {
+                <option value="@sucursal.Id">@sucursal.Nombre</option>
+            }
+        </select>
+    </div>
+    @*CATEGORIAS*@
+    <div class="col-4">
+        <label for="categoriaDropdown">Categoria: </label>
+        <select name="categoriaDropdown" id="categoriaDropdown" class="form-control" disabled>
+            <option value="">Seleccione una categoria</option>
+        </select>
+    </div>
+    @*PRODUCTO*@
+    <div class="col-4">
+        <label for="productoDropdown">Producto: </label>
+        <select name="productoDropdown" id="productoDropdown" class="form-control" disabled>
+            <option value="">Seleccione una producto</option>
+        </select>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+    $(document).ready(function ()  {
+       // Manejamos el cambio en el dropdown de Sucursal
+       $("#sucursalDropdown").change(function (){
+        var sucursalId = $(this).val();
+           // console.log("SucursalId: "+ sucursalId)
+           // Limpiar y deshabilitar los campos del dropdown
+           $("#categoriaDropdown").empty().append("<option value=''>Seleccione una categoria</option>").prop("disabled", true);
+           $("#productoDropdown").empty().append("<option value=''>Seleccione una producto</option>").prop("disabled", true);
+           if (sucursalId) {
+                // Hacer una solicitud AJAX para obtener las categorias asociadas a la sucursal seleccionada
+                $.ajax({
+                url: "/Home/ObtenerCategorias",
+                type: "GET",
+                data: { sucursalId: sucursalId },
+                success: function (categorias) {
+                    // Llenar el dropdown de Categoria con las opciones obtenidas
+                    $.each(categorias, function (index, categoria){
+                        $("#categoriaDropdown").append("<option value='" + categoria.id + "'>" + categoria.nombre + "</option>");
+                        });
+                    // Habilitar el dropdown de categoria
+                    $("#categoriaDropdown").prop("disabled", false)
+                    }
+                })
+           }
+       });
+       
+       // Manejamos el cambio en el dropdown de Categoria
+       $("#categoriaDropdown").change(function () {
+        var categoriaId = $(this).val();
+        // Limpiar y deshabilitar los campos del dropdown de Productos
+        $("#productoDropdown").empty().append("<option value=''>Seleccione una producto</option>").prop("disabled", true);
+           if (categoriaId) {
+               // Hacer una solicitud AJAX para obtener los productos asociados a la categoria seleccionada
+               $.ajax({
+                   url: "/Home/ObtenerProductos",
+                   type: "GET",
+                   data: { categoriaId: categoriaId },
+                   success: function (productos) {
+                       // Llenar el dropdown de Producto con las opciones obtenidas
+                       $.each(productos, function (index, producto){
+                           $("#productoDropdown").append("<option value='" + producto.id + "'>" + producto.nombre + "</option>");
+                       });
+                       // Habilitar el dropdown de producto
+                       $("#productoDropdown").prop("disabled", false)
+                   }
+               })
+           }
+        
+       });
+    });
+</script>
