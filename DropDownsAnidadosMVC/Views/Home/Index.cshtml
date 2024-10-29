@@ -8,34 +8,51 @@
     <p>Desarrolado por: <a href="https://render2web.com/promociones">render2web</a>.</p>
 </div>
 
-<div class="row">
-    @*SUCURSALES*@
-    <div class="col-4">
-        <label for="sucursalDropdown">Sucursal: </label>
-        <select name="sucursalDropdown" id="sucursalDropdown" class="form-control">
-            <option value="">Seleccione una sucursal</option>
-            @foreach (var sucursal in Model.Sucursales)
-            {
+<form asp-action="">
+    <div class="row">
+        @*SUCURSALES*@
+        <div class="col-4">
+            <label for="sucursalDropdown">Sucursal: </label>
+            <select name="sucursalDropdown" id="sucursalDropdown" class="form-control">
+                <option value="">Seleccione una sucursal</option>
+                @foreach (var sucursal in Model.Sucursales)
+                {
                 <option value="@sucursal.Id">@sucursal.Nombre</option>
-            }
-        </select>
+                }
+            </select>
+        </div>
+        @*CATEGORIAS*@
+        <div class="col-4">
+            <label for="categoriaDropdown">Categoria: </label>
+            <select name="categoriaDropdown" id="categoriaDropdown" class="form-control" disabled>
+                <option value="">Seleccione una categoria</option>
+            </select>
+        </div>
+        @*PRODUCTO*@
+        <div class="col-4">
+            <label for="productoDropdown">Producto: </label>
+            <select name="productoDropdown" id="productoDropdown" class="form-control" disabled>
+                <option value="">Seleccione una producto</option>
+            </select>
+        </div>
+        @*OTROS CAMPOS*@
+        <div class="row">
+            <div class="form-group">
+                <label for="precio">Precio: </label>
+                <input class="form-control" id="precio" form="Producto.Precio">
+            </div>
+            <br />
+            <div class="form-group">
+                <label asp-for="Producto.Descripcion">Descripcion: </label>
+                <textarea class="form-control" id="descripcion" cols="30" asp-for="Producto.Descripcion"></textarea>
+            <br />
+            </div>
+            @* BOTON DE ENVIO *@
+            <button type="submit" class="btn btn-primary">Registrar Producto</button>
+        </div>
     </div>
-    @*CATEGORIAS*@
-    <div class="col-4">
-        <label for="categoriaDropdown">Categoria: </label>
-        <select name="categoriaDropdown" id="categoriaDropdown" class="form-control" disabled>
-            <option value="">Seleccione una categoria</option>
-        </select>
-    </div>
-    @*PRODUCTO*@
-    <div class="col-4">
-        <label for="productoDropdown">Producto: </label>
-        <select name="productoDropdown" id="productoDropdown" class="form-control" disabled>
-            <option value="">Seleccione una producto</option>
-        </select>
-    </div>
-</div>
-
+</form>
+@* JQUERY *@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
     $(document).ready(function ()  {

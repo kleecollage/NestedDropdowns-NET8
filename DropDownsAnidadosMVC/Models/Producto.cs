@@ -8,6 +8,8 @@ public class Producto
     
     public double Precio { get; set; }
     
+    public string Descripcion { get; set; }
+    
     // FK
     public int CategoriaId { get; set; }
     
